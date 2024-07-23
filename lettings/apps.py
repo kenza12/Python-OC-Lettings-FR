@@ -5,4 +5,5 @@ class LettingsConfig(AppConfig):
     """
     Lettings application configuration.
     """
-    name = 'lettings'
+
+    name = "lettings"

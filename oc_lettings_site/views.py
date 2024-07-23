@@ -5,4 +5,4 @@ def index(request):
     """
     Display the homepage.
     """
-    return render(request, 'index.html')
+    return render(request, "index.html")
