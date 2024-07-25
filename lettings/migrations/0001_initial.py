@@ -2,29 +2,6 @@ import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
 
-def copy_letting_data(apps, schema_editor):
-    Address = apps.get_model('lettings', 'Address')
-    Letting = apps.get_model('lettings', 'Letting')
-    OldAddress = apps.get_model('oc_lettings_site', 'Address')
-    OldLetting = apps.get_model('oc_lettings_site', 'Letting')
-
-    for old_address in OldAddress.objects.all():
-        Address.objects.create(
-            id=old_address.id,
-            number=old_address.number,
-            street=old_address.street,
-            city=old_address.city,
-            state=old_address.state,
-            zip_code=old_address.zip_code,
-            country_iso_code=old_address.country_iso_code,
-        )
-
-    for old_letting in OldLetting.objects.all():
-        Letting.objects.create(
-            id=old_letting.id,
-            title=old_letting.title,
-            address_id=old_letting.address_id,
-        )
 
 class Migration(migrations.Migration):
 
@@ -54,5 +31,4 @@ class Migration(migrations.Migration):
                 ('address', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='lettings.Address')),
             ],
         ),
-        migrations.RunPython(copy_letting_data),
     ]
