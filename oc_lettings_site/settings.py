@@ -1,6 +1,8 @@
 import os
-
 from pathlib import Path
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -116,3 +118,40 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+# Charger les variables d'environnement
+load_dotenv()
+
+# Initialisation de Sentry
+# Print the DSN to verify it's being loaded correctly
+dsn = os.getenv("SENTRY_DSN")
+print("*****************************Sentry DSN********:", dsn)
+
+sentry_sdk.init(
+    dsn=dsn,
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    profiles_sample_rate=1.0,
+)
+
+# Configuration du logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+        'sentry': {
+            'level': 'ERROR',
+            'class': 'sentry_sdk.integrations.logging.EventHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'sentry'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+        },
+    },
+}

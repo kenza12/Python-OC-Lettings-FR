@@ -1,5 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Profile
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def index(request):
@@ -13,9 +16,13 @@ def index(request):
     Returns:
         HttpResponse: The rendered 'index.html' template with the list of profiles.
     """
-    profiles_list = Profile.objects.all()
-    context = {"profiles_list": profiles_list}
-    return render(request, "profiles/index.html", context)
+    try:
+        profiles_list = Profile.objects.all()
+        context = {"profiles_list": profiles_list}
+        return render(request, "profiles/index.html", context)
+    except Exception as e:
+        logger.error(f"Error retrieving profiles: {e}")
+        raise
 
 
 def profile(request, username):
@@ -30,6 +37,10 @@ def profile(request, username):
     Returns:
         HttpResponse: The rendered 'profile.html' template with the profile details.
     """
-    profile = Profile.objects.get(user__username=username)
-    context = {"profile": profile}
-    return render(request, "profiles/profile.html", context)
+    try:
+        profile = get_object_or_404(Profile, user__username=username)
+        context = {"profile": profile}
+        return render(request, "profiles/profile.html", context)
+    except Exception as e:
+        logger.error(f"Error fetching profile with username {username}: {e}")
+        raise
