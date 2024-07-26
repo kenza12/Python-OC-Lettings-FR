@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
 from .models import Letting
 import logging
 
@@ -22,7 +23,7 @@ def index(request):
         return render(request, "lettings/index.html", context)
     except Exception as e:
         logger.error(f"Error retrieving lettings: {e}")
-        raise
+        return HttpResponse("An error occurred while retrieving lettings.")
 
 
 def letting(request, letting_id):
@@ -46,4 +47,4 @@ def letting(request, letting_id):
         return render(request, "lettings/letting.html", context)
     except Exception as e:
         logger.error(f"Error fetching letting with id {letting_id}: {e}")
-        raise
+        return HttpResponse("An error occurred while retrieving the letting.")

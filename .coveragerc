@@ -3,6 +3,8 @@ omit =
     */tests/*
     */migrations/*
     venv/*
+    manage.py
+    tests.py
 
 [report]
 # fail if coverage is below 80%

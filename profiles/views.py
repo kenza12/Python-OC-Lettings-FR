@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
 from .models import Profile
 import logging
 
@@ -22,7 +23,7 @@ def index(request):
         return render(request, "profiles/index.html", context)
     except Exception as e:
         logger.error(f"Error retrieving profiles: {e}")
-        raise
+        return HttpResponse("An error occurred while retrieving profiles.")
 
 
 def profile(request, username):
@@ -43,4 +44,4 @@ def profile(request, username):
         return render(request, "profiles/profile.html", context)
     except Exception as e:
         logger.error(f"Error fetching profile with username {username}: {e}")
-        raise
+        return HttpResponse(f"An error occurred while retrieving the profile for {username}.")
