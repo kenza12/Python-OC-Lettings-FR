@@ -7,15 +7,17 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Charger les variables d'environnement
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "fp$9^593hsriajg$_%=5trot9g!1qa@ew(o-1#@=&4%=hp46(s"
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -119,13 +121,8 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-# Charger les variables d'environnement
-load_dotenv()
-
 # Initialisation de Sentry
-# Print the DSN to verify it's being loaded correctly
 dsn = os.getenv("SENTRY_DSN")
-print("*****************************Sentry DSN********:", dsn)
 
 sentry_sdk.init(
     dsn=dsn,

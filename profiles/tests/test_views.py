@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from profiles.models import Profile
+from django.core.exceptions import ObjectDoesNotExist
+from unittest.mock import patch
 
 
 class ProfileViewTests(TestCase):
@@ -27,6 +29,17 @@ class ProfileViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "testuser")
 
+    @patch('profiles.views.Profile.objects.all')
+    def test_index_view_exception(self, mock_profiles_all):
+        """
+        Test the profiles index view when an exception is raised.
+
+        Verifies that the view handles the exception and returns the correct error message.
+        """
+        mock_profiles_all.side_effect = Exception("Test exception")
+        response = self.client.get(reverse('profiles:index'))
+        self.assertContains(response, "An error occurred while retrieving profiles.")
+
     def test_profile_view(self):
         """
         Test the profile detail view.
@@ -37,3 +50,17 @@ class ProfileViewTests(TestCase):
         response = self.client.get(reverse('profiles:profile', args=[self.user.username]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Test City")
+
+    @patch('profiles.views.get_object_or_404')
+    def test_profile_view_exception(self, mock_get_object_or_404):
+        """
+        Test the profile detail view when an exception is raised.
+
+        Verifies that the view handles the exception and returns the correct error message.
+        """
+        mock_get_object_or_404.side_effect = ObjectDoesNotExist("Test exception")
+        response = self.client.get(reverse('profiles:profile', args=[self.user.username]))
+        self.assertContains(
+            response,
+            f"An error occurred while retrieving the profile for {self.user.username}."
+        )
