@@ -1,0 +1,52 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - githubactions-config
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        branch: [githubactions-config, master]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Set environment variables for development
+      if: matrix.branch == 'githubactions-config'
+      run: |
+        echo "DEBUG=True" >> $GITHUB_ENV
+        echo "DJANGO_LOG_LEVEL=DEBUG" >> $GITHUB_ENV
+
+    - name: Set environment variables for production
+      if: matrix.branch == 'master'
+      run: |
+        echo "DEBUG=False" >> $GITHUB_ENV
+        echo "DJANGO_LOG_LEVEL=ERROR" >> $GITHUB_ENV
+
+    - name: Run tests with coverage
+      run: |
+        pytest --cov=.
+      env:
+        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+
+    - name: Check coverage
+      run: |
+        coverage report --fail-under=80
