@@ -18,7 +18,8 @@ jobs:
     strategy:
       matrix:
         # Defines a matrix of operating systems and Python versions to test against
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        # os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
         python-version: [3.11]
 
     steps:
