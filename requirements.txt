@@ -5,3 +5,5 @@ pytest-django==3.9.0
 pytest-cov
 sentry-sdk[django]
 python-dotenv
+boto3
+django-storages

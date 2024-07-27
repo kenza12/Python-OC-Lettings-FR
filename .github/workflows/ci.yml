@@ -1,10 +1,10 @@
-name: CI/CD Pipeline
+name: CI Pipeline
 
 on:
   # Triggers the workflow on push events to the specified branches
   push:
     branches:
-      - githubactions-config
+      - dev
       - master
   pull_request:
     branches:
@@ -40,7 +40,7 @@ jobs:
 
     # Set environment variables for the development branch
     - name: Set environment variables for development
-      if: github.ref == 'refs/heads/githubactions-config'
+      if: github.ref == 'refs/heads/dev'
       run: |
         echo "DEBUG=True" >> $GITHUB_ENV
         echo "DJANGO_LOG_LEVEL=DEBUG" >> $GITHUB_ENV
