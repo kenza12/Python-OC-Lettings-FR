@@ -3,19 +3,19 @@ name: CD Pipeline
 on:
   workflow_run:
     workflows: ["CI Pipeline"]
-    types:
-      - completed
+    types: [completed]
+    branches:
+      - 'dev'
 
 jobs:
   debug:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Debug info
-      run: |
-        echo "Workflow conclusion: ${{ github.event.workflow_run.conclusion }}"
-        echo "Head branch: ${{ github.event.workflow_run.head_branch }}"
-        echo "Workflow name: ${{ github.event.workflow_run.name }}"
+      - name: Debug info
+        run: |
+          echo "Workflow conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo "Head branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "Workflow name: ${{ github.event.workflow_run.name }}"
   
   containerize:
     # Trigger this job only if the CI Pipeline succeeds and the branch is 'dev'
