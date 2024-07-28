@@ -128,8 +128,11 @@ jobs:
         id: register-task-def
         run: |
           TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition my-django-app)
+          echo "TASK_DEFINITION=$TASK_DEFINITION"
           NEW_TASK_DEF=$(echo $TASK_DEFINITION | jq --arg IMAGE "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/oc_lettings_site:${{ github.sha }}" '.taskDefinition | .containerDefinitions[0].image=$IMAGE | del(.status, .revision, .taskDefinitionArn, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)')
+          echo "NEW_TASK_DEF=$NEW_TASK_DEF"
           NEW_TASK_DEF_REVISION=$(aws ecs register-task-definition --cli-input-json "$NEW_TASK_DEF")
+          echo "NEW_TASK_DEF_REVISION=$NEW_TASK_DEF_REVISION"
           echo "::set-output name=task-def-arn::$(echo $NEW_TASK_DEF_REVISION | jq -r .taskDefinition.taskDefinitionArn)"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

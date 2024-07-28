@@ -19,6 +19,11 @@ COPY . .
 # Définir les variables d'environnement pour la production
 ENV DJANGO_SETTINGS_MODULE=oc_lettings_site.settings
 
+# Ajouter étape de débogage pour vérifier les variables d'environnement
+RUN echo "AWS_STORAGE_BUCKET_NAME=$AWS_STORAGE_BUCKET_NAME"
+RUN echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+RUN echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+
 # Collecter les fichiers statiques
 RUN python manage.py collectstatic --noinput
 
