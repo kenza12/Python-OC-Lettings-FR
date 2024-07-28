@@ -19,8 +19,8 @@ COPY . .
 # Définir les variables d'environnement pour la production
 ENV DJANGO_SETTINGS_MODULE=oc_lettings_site.settings
 
-# # Collecter les fichiers statiques
-# RUN python manage.py collectstatic --noinput
+# Collecter les fichiers statiques
+RUN python manage.py collectstatic --noinput
 
 # Exposer le port sur lequel l'application s'exécute
 EXPOSE 8000
