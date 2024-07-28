@@ -20,7 +20,11 @@ COPY . .
 ENV DJANGO_SETTINGS_MODULE=oc_lettings_site.settings
 
 # Collecter les fichiers statiques
-RUN python manage.py collectstatic --noinput
+RUN DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY \
+    AWS_STORAGE_BUCKET_NAME=$AWS_STORAGE_BUCKET_NAME \
+    AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+    AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+    python manage.py collectstatic --noinput
 
 # Exposer le port sur lequel l'application s'exécute
 EXPOSE 8000
