@@ -6,6 +6,9 @@ on:
     types: [completed]
     branches:
       - 'dev'
+  pull_request:
+    branches:
+      - 'dev'
 
 jobs:
   debug:
