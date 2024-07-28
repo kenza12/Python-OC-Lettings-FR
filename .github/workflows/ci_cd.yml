@@ -98,6 +98,12 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DEBUG: 'False'
       
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
       - name: Sync static files to S3
         run: |
           aws s3 sync ./staticfiles s3://${{ secrets.AWS_STORAGE_BUCKET_NAME }}/static/
