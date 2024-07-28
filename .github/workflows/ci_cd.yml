@@ -124,6 +124,22 @@ jobs:
           docker tag ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/oc_lettings_site:${{ github.sha }}
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/oc_lettings_site:${{ github.sha }}
 
+      - name: Register new task definition
+        id: register-task-def
+        run: |
+          TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition my-django-app)
+          NEW_TASK_DEF=$(echo $TASK_DEFINITION | jq --arg IMAGE "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/oc_lettings_site:${{ github.sha }}" '.taskDefinition | .containerDefinitions[0].image=$IMAGE | del(.status, .revision, .taskDefinitionArn, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)')
+          NEW_TASK_DEF_REVISION=$(aws ecs register-task-definition --cli-input-json "$NEW_TASK_DEF")
+          echo "::set-output name=task-def-arn::$(echo $NEW_TASK_DEF_REVISION | jq -r .taskDefinition.taskDefinitionArn)"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+
       - name: Deploy to Amazon ECS
         run: |
-          aws ecs update-service --cluster my-django-cluster --service my-django-service --force-new-deployment
+          aws ecs update-service --cluster my-django-cluster --service my-django-service --task-definition ${{ steps.register-task-def.outputs.task-def-arn }} --force-new-deployment
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
