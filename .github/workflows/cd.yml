@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: ["CI Pipeline"]
     types: [completed]
+  pull_request:
     branches:
       - dev
 
@@ -16,59 +17,69 @@ jobs:
           echo "Workflow conclusion: ${{ github.event.workflow_run.conclusion }}"
           echo "Head branch: ${{ github.event.workflow_run.head_branch }}"
           echo "Workflow name: ${{ github.event.workflow_run.name }}"
+  
+  containerize:
+    # Trigger this job only if the CI Pipeline succeeds and the branch is 'dev'
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'dev' }}
+    runs-on: ubuntu-latest
 
-  # containerize:
-  #   if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'dev' }}
-  #   runs-on: ubuntu-latest
+    steps:
+    # Checkout the code from the repository
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
+    # Set up Docker Buildx
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
 
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v1
+    # Log in to Docker Hub
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-  #     - name: Log in to Docker Hub
-  #       uses: docker/login-action@v1
-  #       with:
-  #         username: ${{ secrets.DOCKER_USERNAME }}
-  #         password: ${{ secrets.DOCKER_PASSWORD }}
+    # Build and push Docker image to Docker Hub
+    - name: Build and push Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }} .
+        docker push ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }}
+      env:
+        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        DEBUG: 'False'
+        DJANGO_LOG_LEVEL: 'ERROR'
+        AWS_STORAGE_BUCKET_NAME: ${{ secrets.AWS_STORAGE_BUCKET_NAME }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  #     - name: Build and push Docker image
-  #       run: |
-  #         docker build -t ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }} .
-  #         docker push ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }}
-  #       env:
-  #         DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-  #         DEBUG: 'False'
-  #         DJANGO_LOG_LEVEL: 'ERROR'
-  #         AWS_STORAGE_BUCKET_NAME: ${{ secrets.AWS_STORAGE_BUCKET_NAME }}
-  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  deploy:
+    # Trigger this job only if the containerize job succeeds and the branch is 'dev'
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'dev' }}
+    runs-on: ubuntu-latest
+    needs: containerize
 
-  # deploy:
-  #   if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'dev' }}
-  #   runs-on: ubuntu-latest
-  #   needs: containerize
+    steps:
+    # Configure AWS credentials
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
 
-  #   steps:
-  #     - name: Configure AWS credentials
-  #       uses: aws-actions/configure-aws-credentials@v1
-  #       with:
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws-region: us-east-1
+    # Log in to Amazon ECR
+    - name: Log in to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
 
-  #     - name: Log in to Amazon ECR
-  #       id: login-ecr
-  #       uses: aws-actions/amazon-ecr-login@v1
+    # Pull Docker image from Docker Hub and push to ECR
+    - name: Pull Docker image from Docker Hub and push to ECR
+      run: |
+        docker pull ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }}
+        docker tag ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/oc_lettings_site:${{ github.sha }}
+        docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/oc_lettings_site:${{ github.sha }}
 
-  #     - name: Pull Docker image from Docker Hub and push to ECR
-  #       run: |
-  #         docker pull ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }}
-  #         docker tag ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/oc_lettings_site:${{ github.sha }}
-  #         docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/oc_lettings_site:${{ github.sha }}
-
-  #     - name: Deploy to Amazon ECS
-  #       run: |
-  #         aws ecs update-service --cluster my-django-cluster --service my-django-service --force-new-deployment
+    # Deploy to Amazon ECS
+    - name: Deploy to Amazon ECS
+      run: |
+        aws ecs update-service --cluster my-django-cluster --service my-django-service --force-new-deployment
