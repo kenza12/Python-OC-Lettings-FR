@@ -66,12 +66,14 @@ jobs:
         run: |
           coverage report
 
-      # Trigger the CD Pipeline
+  trigger-cd:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
       - name: Trigger CD Pipeline
-        if: github.ref == 'refs/heads/dev'
         run: |
           curl -X POST \
             -H "Authorization: token ${{ secrets.ACTIONS_KEY }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/cd.yml/dispatches \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/109563746/dispatches \
             -d '{"ref":"dev"}'
