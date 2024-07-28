@@ -88,12 +88,13 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }}
         env:
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          DEBUG: 'False'
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           DJANGO_LOG_LEVEL: 'ERROR'
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           AWS_STORAGE_BUCKET_NAME: ${{ secrets.AWS_STORAGE_BUCKET_NAME }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DEBUG: 'False'
 
   deploy:
     needs: containerize
