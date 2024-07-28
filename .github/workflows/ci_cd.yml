@@ -83,7 +83,11 @@ jobs:
 
       - name: Build and push Docker image to Docker Hub
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }} .
+          docker build --build-arg AWS_STORAGE_BUCKET_NAME=${{ secrets.AWS_STORAGE_BUCKET_NAME }} \
+                       --build-arg AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+                       --build-arg AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+                       --build-arg DEBUG=${{ env.DEBUG }} \
+                       -t ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }}
         env:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
