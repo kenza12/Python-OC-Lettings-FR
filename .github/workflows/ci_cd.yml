@@ -62,6 +62,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Create .env file
+        run: |
+          echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
+          echo "DJANGO_LOG_LEVEL=DEBUG" >> .env
+          echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
+          echo "AWS_STORAGE_BUCKET_NAME=${{ secrets.AWS_STORAGE_BUCKET_NAME }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+          echo "DEBUG=False" >> .env
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
@@ -71,14 +81,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image to Docker Hub
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/oc_lettings_site:${{ github.sha }}
         env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           DJANGO_LOG_LEVEL: 'ERROR'
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           AWS_STORAGE_BUCKET_NAME: ${{ secrets.AWS_STORAGE_BUCKET_NAME }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
