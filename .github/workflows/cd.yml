@@ -1,9 +1,11 @@
 name: CD Pipeline
 
 on:
-  workflow_run:
-    workflows: ["CI Pipeline"]
-    types: [completed]
+  push:
+    branches:
+      - 'dev'
+      - 'master'
+  pull_request:
     branches:
       - 'dev'
       - 'master'
