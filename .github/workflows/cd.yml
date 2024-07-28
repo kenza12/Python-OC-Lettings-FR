@@ -4,6 +4,9 @@ on:
   workflow_run:
     workflows: ["CI Pipeline"]
     types: [completed]
+    branches:
+      - 'dev'
+      - 'master'
   workflow_dispatch:
 
 jobs:
