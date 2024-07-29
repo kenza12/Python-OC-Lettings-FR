@@ -28,8 +28,8 @@ COPY . .
 # Copier le fichier de configuration Nginx dans le conteneur
 COPY nginx.conf /etc/nginx/sites-available/default
 
-# Créer un lien symbolique pour activer la configuration Nginx
-RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+# Supprimer le lien symbolique par défaut, puis créer un nouveau lien symbolique pour activer la configuration Nginx
+RUN rm /etc/nginx/sites-enabled/default && ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 
 # Définir les variables d'environnement pour la production
 ENV DJANGO_SETTINGS_MODULE=oc_lettings_site.settings
