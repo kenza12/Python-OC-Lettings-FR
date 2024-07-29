@@ -1,6 +1,9 @@
 # Utilisez l'image officielle de Python comme base
 FROM python:3.11-slim
 
+# Installer Nginx
+RUN apt-get update && apt-get install -y nginx
+
 # Définir les arguments de construction pour les variables d'environnement
 ARG AWS_STORAGE_BUCKET_NAME
 ARG AWS_ACCESS_KEY_ID
@@ -22,6 +25,12 @@ RUN pip install gunicorn
 # Copier le reste du code de l'application dans le conteneur
 COPY . .
 
+# Copier le fichier de configuration Nginx dans le conteneur
+COPY nginx.conf /etc/nginx/sites-available/default
+
+# Créer un lien symbolique pour activer la configuration Nginx
+RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+
 # Définir les variables d'environnement pour la production
 ENV DJANGO_SETTINGS_MODULE=oc_lettings_site.settings
 
@@ -40,8 +49,8 @@ RUN echo "DEBUG=$DEBUG"
 # Collecter les fichiers statiques
 RUN python manage.py collectstatic --noinput
 
-# Exposer le port sur lequel l'application s'exécute
-EXPOSE 8000
+# Exposer les ports sur lesquels Nginx et l'application Django s'exécutent
+EXPOSE 80 8000
 
-# Lancer l'application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "oc_lettings_site.wsgi:application"]
+# Commande pour lancer Nginx et Gunicorn
+CMD service nginx start && gunicorn --bind 0.0.0.0:8000 oc_lettings_site.wsgi:application
