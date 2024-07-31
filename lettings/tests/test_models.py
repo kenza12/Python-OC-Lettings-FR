@@ -6,6 +6,7 @@ class AddressModelTest(TestCase):
     """
     Test suite for the Address model.
     """
+
     def setUp(self):
         """
         Set up a sample Address instance for testing.
@@ -18,7 +19,7 @@ class AddressModelTest(TestCase):
             city="Anytown",
             state="NY",
             zip_code=12345,
-            country_iso_code="USA"
+            country_iso_code="USA",
         )
 
     def test_address_creation(self):
@@ -47,6 +48,7 @@ class LettingModelTest(TestCase):
     """
     Test suite for the Letting model.
     """
+
     def setUp(self):
         """
         Set up a sample Letting instance for testing.
@@ -59,12 +61,9 @@ class LettingModelTest(TestCase):
             city="Anytown",
             state="NY",
             zip_code=12345,
-            country_iso_code="USA"
+            country_iso_code="USA",
         )
-        self.letting = Letting.objects.create(
-            title="Cozy Cottage",
-            address=self.address
-        )
+        self.letting = Letting.objects.create(title="Cozy Cottage", address=self.address)
 
     def test_letting_creation(self):
         """
