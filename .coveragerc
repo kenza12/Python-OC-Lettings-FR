@@ -5,6 +5,12 @@ omit =
     venv/*
     manage.py
     tests.py
+    docker_manager.py
+    */wsgi.py
+    */asgi.py
+    */admin.py
+    */__init__.py
+    */settings.py
 
 [report]
 # fail if coverage is below 80%
