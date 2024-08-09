@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Technologies &mdash; Documentation OC Lettings 1.0</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=7a28dfa3"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
+        <script src="_static/translations.js?v=041d0952"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="next" title="Base de Donnees" href="base_donnees.html" />
+    <link rel="prev" title="Demarrage Rapide" href="demarrage_rapide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            OC Lettings
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contenu:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="description_projet.html">Description du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demarrage_rapide.html">Demarrage Rapide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Technologies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_donnees.html">Base de Donnees</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interfaces.html#interface-d-administration-django">Interface d’Administration Django</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces.html#interface-graphique-du-site">Interface Graphique du Site</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utilisation.html">Utilisation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#interface-d-administration">Interface d’Administration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilisation.html#interface-utilisateur">Interface Utilisateur</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deploiement.html">Deploiement</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">OC Lettings</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Technologies</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/technologies.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="technologies">
+<h1>Technologies<a class="headerlink" href="#technologies" title="Lien vers cette rubrique"></a></h1>
+<p>Le projet OC Lettings utilise les technologies et langages suivants :</p>
+<ul class="simple">
+<li><p><strong>Django</strong> : Framework web utilisé pour le développement de l’application.</p></li>
+<li><p><strong>Django-storages</strong> : Facilite le stockage des fichiers statiques sur des services cloud comme AWS S3.</p></li>
+<li><p><strong>boto3</strong> : Bibliothèque AWS SDK pour Python, utilisée pour interagir avec les services AWS, comme S3.</p></li>
+<li><p><strong>SQLite</strong> : Base de données pour stocker les données de l’application.</p></li>
+<li><p><strong>Docker/DockerHub</strong> : Pour la containerisation de l’application, permettant de créer et partager des images Docker.</p></li>
+<li><p><strong>AWS</strong> : Utilisé pour le déploiement de l’application. Les services AWS utilisés incluent :</p>
+<ul>
+<li><p>S3 pour le stockage des fichiers statiques</p></li>
+<li><p>EC2 pour l’hébergement des instances de calcul</p></li>
+<li><p>ECS pour l’orchestration des conteneurs Docker</p></li>
+<li><p>ECR pour le stockage des images Docker</p></li>
+</ul>
+</li>
+<li><p><strong>GitHub/GitHub Actions</strong> : Pour l’hébergement du code source, l’intégration continue, et le déploiement automatisé via des workflows.</p></li>
+<li><p><strong>pytest/pytest-cov</strong> : Framework de test pour écrire et exécuter des tests automatisés, avec une mesure de la couverture de code.</p></li>
+<li><p><strong>Sentry</strong> : Outil de surveillance et de gestion des erreurs en production, intégrant le suivi des exceptions non gérées.</p></li>
+<li><p><strong>flake8</strong> : Outil de linting pour Python, aidant à détecter et corriger les erreurs de style et de syntaxe.</p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="demarrage_rapide.html" class="btn btn-neutral float-left" title="Demarrage Rapide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="base_donnees.html" class="btn btn-neutral float-right" title="Base de Donnees" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2024, kenza BAZI-KABBAJ.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
