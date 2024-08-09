@@ -24,7 +24,3 @@ python:
   install:
     - requirements: docs/requirements.txt
     - path: .
-
-# Additional commands (optional)
-commands:
-  - echo "Building the documentation for OC Lettings Site"
