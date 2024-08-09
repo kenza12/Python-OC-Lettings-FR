@@ -22,5 +22,5 @@ formats:
 # to build your documentation
 python:
   install:
-    - requirements: docs/requirements.txt
+    - requirements: doc/requirements.txt
     - path: .
