@@ -9,13 +9,11 @@ Pour démarrer rapidement avec OC Lettings :
 
    source venv/bin/activate  # Sur Windows, utilisez `venv\Scripts\Activate.ps1`
 
-**2. Exécutez le serveur de développement Django :**
+**2. Configurez le fichier `.env` :**
 
-Assurez-vous de configurer le fichier `.env` avec les variables nécessaires.
+Assurez-vous que le fichier `.env` contient les variables suivantes :
 
-Exemple de fichier `.env`:
-
-.. code-block:: none
+.. code-block:: bash
 
    SENTRY_DSN=https://your_sentry_dsn
    DJANGO_LOG_LEVEL=DEBUG
@@ -41,9 +39,9 @@ Exemple de fichier `.env`:
 
 **5. Accédez à l'interface d'administration :**
 
-   Vous pouvez accéder à l'interface d'administration en naviguant à l'URL suivante : http://127.0.0.1:8000/admin/
+Vous pouvez accéder à l'interface d'administration en naviguant à l'URL suivante : http://127.0.0.1:8000/admin/
 
-   Les identifiants de connexion sont :
+Les identifiants de connexion sont :
 
-   - **Nom d'utilisateur** : admin
-   - **Mot de passe** : Abc1234!
+- **Nom d'utilisateur** : admin
+- **Mot de passe** : Abc1234!
