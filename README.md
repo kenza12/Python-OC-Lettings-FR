@@ -182,4 +182,4 @@ Lancez le script `docker_manager.py` pour automatiser le processus de constructi
   python docker_manager.py
   ```
 
-En suivant ces étapes, vous pourrez déployer l'application localement en utilisant Docker.
+En suivant ces étapes, vous pourrez déployer l'application localement en utilisant Docker sur l'adresse : `http://localhost:8000`.
