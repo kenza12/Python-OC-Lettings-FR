@@ -15,18 +15,17 @@ Assurez-vous de configurer le fichier `.env` avec les variables nécessaires.
 
 Exemple de fichier `.env`:
 
-.. code-block:: bash
+.. code-block:: none
 
-SENTRY_DSN=https://your_sentry_dsn
-DJANGO_LOG_LEVEL=DEBUG
-DJANGO_SECRET_KEY=your_django_secret_key
-AWS_STORAGE_BUCKET_NAME=your_bucket_name
-AWS_ACCESS_KEY_ID=your_access_key_id
-AWS_SECRET_ACCESS_KEY=your_secret_access_key
-DEBUG=True
-DOCKER_USERNAME=your_docker_username
-DOCKER_PASSWORD=your_docker_password
-
+   SENTRY_DSN=https://your_sentry_dsn
+   DJANGO_LOG_LEVEL=DEBUG
+   DJANGO_SECRET_KEY=your_django_secret_key
+   AWS_STORAGE_BUCKET_NAME=your_bucket_name
+   AWS_ACCESS_KEY_ID=your_access_key_id
+   AWS_SECRET_ACCESS_KEY=your_secret_access_key
+   DEBUG=True
+   DOCKER_USERNAME=your_docker_username
+   DOCKER_PASSWORD=your_docker_password
 
 **3. Exécutez le serveur de développement Django :**
 
